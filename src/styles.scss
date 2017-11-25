@@ -1,0 +1,21 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+@font-face {
+  font-family: JosefinSans-Light;
+  src: url('assets/JosefinSans-Light.ttf');
+}
+
+@font-face {
+  font-family: JosefinSans-Regular;
+  src: url('assets/JosefinSans-Regular.ttf');
+}
+
+body {
+  background: url('assets/background.jpg') no-repeat center center;
+  background-size: cover;
+  font-family: JosefinSans-Light;
+  color: white;
+  min-height: 100vh;
+  margin: 0;
+}
