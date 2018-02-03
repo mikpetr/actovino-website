@@ -1,0 +1,27 @@
+@import "../app.colors";
+
+header {
+  background-color: $main-color;
+  color: white;
+  overflow: hidden;
+
+  span, i {
+    line-height: 60px;
+    vertical-align: middle;
+  }
+
+  .title {
+    float: left;
+    padding-left: 30px;
+  }
+
+  .user-name {
+    float: right;
+    padding-right: 30px;
+  }
+
+  .settings-icon {
+    float: right;
+    padding-right: 30px;
+  }
+}

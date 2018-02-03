@@ -14,6 +14,7 @@ import { MatIconModule } from '@angular/material';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { HeadingComponent } from './heading/heading.component';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -23,7 +24,8 @@ import { AuthService } from './auth.service';
   declarations: [
     AppComponent,
     HomeComponent,
-    DashboardComponent
+    DashboardComponent,
+    HeadingComponent
   ],
   imports: [
     BrowserModule,

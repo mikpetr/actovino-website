@@ -5,9 +5,14 @@ import {
   LoginResponse,
   AuthResponse
 } from 'ngx-facebook';
+import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
+import { fromPromise } from 'rxjs/observable/fromPromise';
 
 @Injectable()
 export class AuthService {
+
+  private userData: Object;
 
   constructor(private facebookService: FacebookService) {
 
@@ -19,20 +24,45 @@ export class AuthService {
     facebookService.init(initParams);
   }
 
-  signInWithFacebook(): Promise<any> {
+  signInWithFacebook(): Promise<Object> {
+    return this.facebookService.login();
+  }
 
-    let promise: Promise<any> = new Promise((resolve, reject) => {
+  checkFacebookLoginStatus(): Promise<Object> {
+    return this.facebookService.getLoginStatus();
+  }
 
-      this.facebookService.login()
+  // Make sure to connected with facebook
+  connectWithFacebook(): Promise<Object> {
+    let promise: Promise<Object> = new Promise((resolve, reject) => {
+
+      this.checkFacebookLoginStatus()
         .then((response: LoginResponse) => {
-          let authResponse: AuthResponse = response.authResponse;
 
+          if (response.status === 'connected') {
+            resolve(response);
+          } else {
+            this.signInWithFacebook().then((response: LoginResponse) => {
+              resolve(response);
+            })
+            .catch((error: any) => reject(error));
+          }
+        });
+
+    });
+
+    return promise;
+  }
+
+  loadUserDataFromFacebook(): Promise<Object> {
+
+    let promise: Promise<Object> = new Promise((resolve, reject) => {
+      this.connectWithFacebook()
+        .then(() => {
           this.facebookService.api('me?fields=id,name,email,picture')
-            .then((res: any) => {
-              resolve(res);
-
-              // TODO: write user data into service
-
+            .then((res: Object) => {
+              this.userData = res;
+              resolve(this.userData);
             })
             .catch((error: any) => reject(error));
         })
@@ -40,6 +70,15 @@ export class AuthService {
     });
 
     return promise;
+  }
+
+  getUserData(): Observable<Object> {
+
+    if (this.userData)
+      return of(this.userData);
+
+    // Load data if not exists
+    return fromPromise(this.loadUserDataFromFacebook());
   }
 
 }
